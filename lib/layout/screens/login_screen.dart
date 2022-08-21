@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:social_media_app/layout/screens/register_screen.dart';
+import 'package:social_media_app/layout/widgets/shop_text_button.dart';
 import '../widgets/social_app_button.dart';
 import '../widgets/social_app_text_field.dart';
 
@@ -75,7 +77,31 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(
                     height: 30,
                   ),
-                  SocialAppButton(text: "LOGIN", onPressed: () {})
+                  SocialAppButton(
+                      text: "LOGIN",
+                      onPressed: () {
+                        login(emailController.text, passwordController.text);
+                      }),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Don't have an account?",
+                        style: TextStyle(fontSize: 18, color: Colors.black),
+                      ),
+                      SocialAppTextButton(
+                          text: "register now",
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => RegisterScreen()));
+                          }),
+                    ],
+                  )
                 ],
               ),
             ),
@@ -83,5 +109,14 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> login(String email, String password) async {
+    await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((value) {
+      print(value.user!.uid);
+      print(value.user!.email);
+    });
   }
 }
