@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/cubit/app_cubit.dart';
 import 'package:social_media_app/cubit/app_states.dart';
+import 'package:social_media_app/layout/widgets/app_alert_dialog.dart';
 import 'package:social_media_app/layout/widgets/social_app_button.dart';
 import 'package:social_media_app/layout/widgets/social_app_text_field.dart';
 
@@ -28,7 +29,13 @@ class RegisterScreen extends StatelessWidget {
           child: BlocProvider(
             create: ((context) => AppCubit()),
             child: BlocConsumer<AppCubit, AppStates>(
-              listener: ((context, state) {}),
+              listener: ((context, state) {
+                if (state is UserLoginErrorState) {
+                  showDialog(
+                      context: context,
+                      builder: (context) => AppAlertDialog(text: state.error));
+                }
+              }),
               builder: ((context, state) {
                 AppCubit cubit = context.read<AppCubit>();
                 return SingleChildScrollView(
@@ -126,12 +133,12 @@ class RegisterScreen extends StatelessWidget {
                             label: 'Confirm Password',
                             prefix: const Icon(Icons.lock),
                             controller: cnofPasswordController,
-                            isPassword: !cubit.passwordVisabilty,
+                            isPassword: !cubit.confpasswordVisabilty,
                             suffix: IconButton(
                                 onPressed: () {
-                                  cubit.changePasswordVisablity();
+                                  cubit.changeConfPasswordVisablity();
                                 },
-                                icon: cubit.passwordVisabilty
+                                icon: cubit.confpasswordVisabilty
                                     ? const Icon(Icons.visibility)
                                     : const Icon(Icons.visibility_off)),
                             validate: (value) {
@@ -147,16 +154,20 @@ class RegisterScreen extends StatelessWidget {
                           const SizedBox(
                             height: 30,
                           ),
-                          SocialAppButton(
-                              text: "REGISTER",
-                              onPressed: () {
-                                if (formKey.currentState!.validate()) {
-                                  cubit.register(
-                                    emailController.text,
-                                    passwordController.text,
-                                  );
-                                }
-                              }),
+                          (state is LoadingState)
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : SocialAppButton(
+                                  text: "REGISTER",
+                                  onPressed: () {
+                                    if (formKey.currentState!.validate()) {
+                                      cubit.register(
+                                        emailController.text,
+                                        passwordController.text,
+                                      );
+                                    }
+                                  }),
                           const SizedBox(
                             height: 20,
                           ),
