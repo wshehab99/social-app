@@ -5,13 +5,15 @@ import 'package:social_media_app/cubit/app_states.dart';
 class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(InitialAppstate());
   bool passwordVisabilty = false;
+  bool confpasswordVisabilty = false;
   void changePasswordVisablity() {
     passwordVisabilty = !passwordVisabilty;
     emit(ChangePasswordVisability());
   }
 
-  void back() {
-    emit(InitialAppstate());
+  void changeConfPasswordVisablity() {
+    confpasswordVisabilty = !confpasswordVisabilty;
+    emit(ChangePasswordVisability());
   }
 
   Future<void> login(String email, String password) async {
