@@ -41,4 +41,8 @@ class AppCubit extends Cubit<AppStates> {
       emit(UserLoginErrorState(error: error.toString()));
     });
   }
+
+  void back() {
+    emit(InitialAppstate());
+  }
 }
