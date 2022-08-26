@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/cubit/app_states.dart';
+import 'package:social_media_app/shared/local/cache_helper.dart';
 
 class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(InitialAppstate());
@@ -19,15 +20,15 @@ class AppCubit extends Cubit<AppStates> {
 
   Future<void> login(String email, String password) async {
     emit(LoadingState());
-    await FirebaseAuth.instance
+    UserCredential user = await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
-        .then((value) {
-      print(value.user!.uid);
-      print(value.user!.email);
-      emit(UserLoginSuccessState());
-    }).catchError((error) {
+        .catchError((error) {
       emit(UserLoginErrorState(error: error.toString()));
     });
+    print(user.user!.uid);
+    print(user.user!.email);
+    await CacheHelper.saveData(key: "userId", value: user.user!.uid);
+    emit(UserLoginSuccessState());
   }
 
   Future<void> register({
@@ -37,17 +38,17 @@ class AppCubit extends Cubit<AppStates> {
     required String name,
   }) async {
     emit(LoadingState());
-    await FirebaseAuth.instance
+    UserCredential user = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password)
-        .then((value) {
-      print(value.user!.uid);
-      print(value.user!.email);
-      createUser(
-          email: email, name: name, phone: phone, userId: value.user!.uid);
-      emit(UserRegisterSuccessState());
-    }).catchError((error) {
+        .catchError((error) {
       emit(UserRegisterErrorState(error: error.toString()));
     });
+    print(user.user!.uid);
+    print(user.user!.email);
+    await createUser(
+        email: email, name: name, phone: phone, userId: user.user!.uid);
+    await CacheHelper.saveData(key: 'userId', value: user.user!.uid);
+    emit(UserRegisterSuccessState());
   }
 
   Future<void> createUser({
@@ -62,6 +63,7 @@ class AppCubit extends Cubit<AppStates> {
       'email': email,
       'phone': phone,
       'userId': userId,
+      'isEmailVerified': false,
     }).then((value) {
       emit(UserCreateSuccessState());
     }).catchError((error) {
@@ -69,7 +71,13 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  void back() {
-    emit(InitialAppstate());
+  Future getUserDetails(String userId) async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(userId)
+        .get()
+        .then((value) {
+      print(value.data());
+    }).catchError((error) {});
   }
 }
