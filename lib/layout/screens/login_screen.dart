@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/cubit/app_cubit.dart';
 import 'package:social_media_app/cubit/app_states.dart';
+import 'package:social_media_app/layout/screens/home_screen.dart';
 import 'package:social_media_app/layout/screens/register_screen.dart';
 import 'package:social_media_app/layout/widgets/shop_text_button.dart';
 import '../widgets/app_alert_dialog.dart';
@@ -33,6 +34,11 @@ class LoginScreen extends StatelessWidget {
                     builder: (context) => AppAlertDialog(
                           text: state.error,
                         ));
+              } else if (state is UserLoginSuccessState) {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const HomeScreen()));
               }
             }),
             builder: (context, state) {

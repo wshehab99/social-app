@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/cubit/app_cubit.dart';
 import 'package:social_media_app/cubit/app_states.dart';
+import 'package:social_media_app/layout/screens/home_screen.dart';
 import 'package:social_media_app/layout/widgets/app_alert_dialog.dart';
 import 'package:social_media_app/layout/widgets/social_app_button.dart';
 import 'package:social_media_app/layout/widgets/social_app_text_field.dart';
@@ -30,10 +31,19 @@ class RegisterScreen extends StatelessWidget {
             create: ((context) => AppCubit()),
             child: BlocConsumer<AppCubit, AppStates>(
               listener: ((context, state) {
-                if (state is UserLoginErrorState) {
+                if (state is UserRegisterErrorState) {
                   showDialog(
                       context: context,
                       builder: (context) => AppAlertDialog(text: state.error));
+                } else if (state is UserCreateErrorState) {
+                  showDialog(
+                      context: context,
+                      builder: (context) => AppAlertDialog(text: state.error));
+                } else if (state is UserCreateSuccessState) {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomeScreen()));
                 }
               }),
               builder: ((context, state) {
