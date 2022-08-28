@@ -31,6 +31,7 @@ class SocialApp extends StatelessWidget {
       title: 'Social App',
       theme: lightThem,
       darkTheme: darkTheme,
+      themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
       home: userId!.isNotEmpty
           ? BlocProvider(
