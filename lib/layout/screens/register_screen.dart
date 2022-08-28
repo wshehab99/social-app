@@ -40,10 +40,8 @@ class RegisterScreen extends StatelessWidget {
                       context: context,
                       builder: (context) => AppAlertDialog(text: state.error));
                 } else if (state is UserCreateSuccessState) {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HomeScreen()));
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => HomeScreen()));
                 }
               }),
               builder: ((context, state) {

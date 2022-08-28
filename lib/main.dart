@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/cubit/app_cubit.dart';
 import 'package:social_media_app/layout/screens/home_screen.dart';
+import 'package:social_media_app/my_bloc_observer.dart';
 
 import 'package:social_media_app/shared/constant.dart';
 import 'package:social_media_app/shared/local/cache_helper.dart';
@@ -13,7 +14,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await CacheHelper.init();
-
+  Bloc.observer = MyBlocObserver();
   String userId = await CacheHelper.getData(key: 'userId') ?? "";
   runApp(SocialApp(userId: userId));
 }
@@ -34,7 +35,7 @@ class SocialApp extends StatelessWidget {
       home: userId!.isNotEmpty
           ? BlocProvider(
               create: ((context) => AppCubit()..getUserDetails(userId!)),
-              child: const HomeScreen())
+              child: HomeScreen())
           : LoginScreen(),
     );
   }
