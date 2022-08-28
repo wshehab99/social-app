@@ -5,16 +5,24 @@ class SocialAppTextButton extends StatelessWidget {
     Key? key,
     required this.text,
     required this.onPressed,
+    this.fontSize = 18,
+    this.fontWeight = FontWeight.bold,
   }) : super(key: key);
   final String? text;
   final void Function()? onPressed;
+  final FontWeight? fontWeight;
+  final double? fontSize;
+
   @override
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: onPressed,
       child: Text(
         text!,
-        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        style: TextStyle(
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+        ),
       ),
     );
   }

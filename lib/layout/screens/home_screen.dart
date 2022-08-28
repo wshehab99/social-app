@@ -6,6 +6,7 @@ import 'package:social_media_app/layout/screens/chats_screen.dart';
 import 'package:social_media_app/layout/screens/feeds_screen.dart';
 import 'package:social_media_app/layout/screens/notifications_screen.dart';
 import 'package:social_media_app/layout/screens/search-screen.dart';
+import 'package:social_media_app/layout/widgets/app_icon_button.dart';
 import 'package:social_media_app/layout/widgets/nav_bar_widget.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -33,23 +34,20 @@ class HomeScreen extends StatelessWidget {
             title: const Text('News Feed'),
             iconTheme: Theme.of(context).iconTheme,
             actions: [
-              IconButton(
+              AppIconButton(
                 onPressed: () {},
-                icon: const Icon(
-                  Icons.notifications_active,
-                ),
+                icon: Icons.add,
                 iconSize: 30,
-                constraints: const BoxConstraints(minHeight: 35, minWidth: 35),
-                padding: EdgeInsets.zero,
               ),
-              IconButton(
+              AppIconButton(
                 onPressed: () {},
-                icon: const Icon(
-                  Icons.search,
-                ),
+                icon: Icons.notifications_active,
                 iconSize: 30,
-                constraints: const BoxConstraints(minHeight: 35, minWidth: 35),
-                padding: EdgeInsets.zero,
+              ),
+              AppIconButton(
+                onPressed: () {},
+                icon: Icons.search,
+                iconSize: 30,
               ),
             ],
           ),
