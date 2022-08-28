@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:social_media_app/layout/widgets/shop_text_button.dart';
 
 class VerifyEmail extends StatelessWidget {
-  const VerifyEmail({Key? key}) : super(key: key);
-
+  const VerifyEmail({Key? key, required this.onPressed}) : super(key: key);
+  final void Function()? onPressed;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,7 +21,7 @@ class VerifyEmail extends StatelessWidget {
           ),
           const Spacer(),
           SocialAppTextButton(
-            onPressed: () {},
+            onPressed: onPressed,
             text: 'send',
           ),
         ],

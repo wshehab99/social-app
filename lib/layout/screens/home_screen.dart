@@ -2,26 +2,60 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/cubit/app_cubit.dart';
 import 'package:social_media_app/cubit/app_states.dart';
-
-import 'package:social_media_app/layout/widgets/verify_email_widget.dart';
+import 'package:social_media_app/layout/screens/chats_screen.dart';
+import 'package:social_media_app/layout/screens/feeds_screen.dart';
+import 'package:social_media_app/layout/screens/notifications_screen.dart';
+import 'package:social_media_app/layout/screens/search-screen.dart';
+import 'package:social_media_app/layout/widgets/nav_bar_widget.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
+  HomeScreen({Key? key}) : super(key: key);
+  final List<Widget> screens = [
+    const FeedsScreen(),
+    const ChatsScreen(),
+    const NotificationsScreen(),
+    const SearchScreen(),
+  ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('News Feed'),
-      ),
-      body: BlocConsumer<AppCubit, AppStates>(
-        listener: ((context, state) {}),
-        builder: ((context, state) {
-          return Column(children: const [
-            VerifyEmail(),
-          ]);
-        }),
-      ),
+    return BlocConsumer<AppCubit, AppStates>(
+      listener: ((context, state) {}),
+      builder: ((context, state) {
+        AppCubit cubit = context.read<AppCubit>();
+        return Scaffold(
+          bottomNavigationBar: NavBarWidget(
+            onTap: (index) {
+              cubit.cahngeCurrentIndex(index);
+            },
+            index: cubit.currentIndex,
+          ),
+          appBar: AppBar(
+            title: const Text('News Feed'),
+            iconTheme: Theme.of(context).iconTheme,
+            actions: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.notifications_active,
+                ),
+                iconSize: 30,
+                constraints: const BoxConstraints(minHeight: 35, minWidth: 35),
+                padding: EdgeInsets.zero,
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.search,
+                ),
+                iconSize: 30,
+                constraints: const BoxConstraints(minHeight: 35, minWidth: 35),
+                padding: EdgeInsets.zero,
+              ),
+            ],
+          ),
+          body: screens[cubit.currentIndex],
+        );
+      }),
     );
   }
 }

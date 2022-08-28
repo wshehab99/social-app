@@ -8,6 +8,7 @@ class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(InitialAppstate());
   bool passwordVisabilty = false;
   bool confpasswordVisabilty = false;
+  int currentIndex = 0;
   void changePasswordVisablity() {
     passwordVisabilty = !passwordVisabilty;
     emit(ChangePasswordVisability());
@@ -79,5 +80,19 @@ class AppCubit extends Cubit<AppStates> {
         .then((value) {
       print(value.data());
     }).catchError((error) {});
+  }
+
+  Future<void> verfiyEmail() async {
+    await FirebaseAuth.instance.currentUser!
+        .sendEmailVerification()
+        .then((value) {
+      emit(state);
+      print(FirebaseAuth.instance.currentUser!.emailVerified);
+    }).catchError((error) {});
+  }
+
+  void cahngeCurrentIndex(int index) {
+    currentIndex = index;
+    emit(ChangeNavigationBarScreen());
   }
 }
