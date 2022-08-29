@@ -6,7 +6,7 @@ import 'package:social_media_app/layout/screens/chats_screen.dart';
 import 'package:social_media_app/layout/screens/feeds_screen.dart';
 import 'package:social_media_app/layout/screens/notifications_screen.dart';
 import 'package:social_media_app/layout/screens/search-screen.dart';
-import 'package:social_media_app/layout/widgets/app_icon_button.dart';
+import 'package:social_media_app/layout/widgets/posts/app_icon_button.dart';
 import 'package:social_media_app/layout/widgets/nav_bar_widget.dart';
 
 class HomeScreen extends StatelessWidget {
