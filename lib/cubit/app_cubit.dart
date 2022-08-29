@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/cubit/app_states.dart';
+import 'package:social_media_app/models/user_model.dart';
 import 'package:social_media_app/shared/local/cache_helper.dart';
 
 class AppCubit extends Cubit<AppStates> {
@@ -59,25 +60,34 @@ class AppCubit extends Cubit<AppStates> {
     required String userId,
   }) async {
     emit(LoadingState());
-    await FirebaseFirestore.instance.collection('users').doc(userId).set({
-      'name': name,
-      'email': email,
-      'phone': phone,
-      'userId': userId,
-      'isEmailVerified': false,
-    }).then((value) {
+    UserModel user = UserModel(
+      name: name,
+      phone: phone,
+      email: email,
+      userId: userId,
+    );
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .set(
+          user.toJson(user: user),
+        )
+        .then((value) {
       emit(UserCreateSuccessState());
     }).catchError((error) {
       emit(UserCreateErrorState(error: error.toString()));
     });
   }
 
+  UserModel? userModel;
   Future getUserDetails(String userId) async {
     await FirebaseFirestore.instance
         .collection("users")
         .doc(userId)
         .get()
         .then((value) {
+      userModel = UserModel.fromJson(json: value.data()!);
       print(value.data());
     }).catchError((error) {});
   }
