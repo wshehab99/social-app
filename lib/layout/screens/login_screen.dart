@@ -5,6 +5,7 @@ import 'package:social_media_app/cubit/app_states.dart';
 import 'package:social_media_app/layout/screens/home_screen.dart';
 import 'package:social_media_app/layout/screens/register_screen.dart';
 import 'package:social_media_app/layout/widgets/shop_text_button.dart';
+import 'package:social_media_app/shared/local/cache_helper.dart';
 import '../widgets/app_alert_dialog.dart';
 import '../widgets/social_app_button.dart';
 import '../widgets/social_app_text_field.dart';
@@ -27,7 +28,7 @@ class LoginScreen extends StatelessWidget {
         child: BlocProvider(
           create: (context) => AppCubit(),
           child: BlocConsumer<AppCubit, AppStates>(
-            listener: ((context, state) {
+            listener: ((context, state) async {
               if (state is UserLoginErrorState) {
                 showDialog(
                     context: context,
@@ -35,12 +36,15 @@ class LoginScreen extends StatelessWidget {
                           text: state.error,
                         ));
               } else if (state is UserLoginSuccessState) {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => BlocProvider(
-                            create: (context) => AppCubit(),
-                            child: HomeScreen())));
+                await CacheHelper.getData(key: "userId").then((value) {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => BlocProvider(
+                              create: (context) =>
+                                  AppCubit()..getUserDetails(value),
+                              child: HomeScreen())));
+                });
               }
             }),
             builder: (context, state) {

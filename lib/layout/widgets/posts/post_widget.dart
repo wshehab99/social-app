@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/layout/widgets/posts/app_icon_button.dart';
 
-import 'posts/comment_text_field.dart';
-import 'posts/like_button.dart';
+import 'comment_text_field.dart';
+import 'like_button.dart';
 
 class PostWidget extends StatelessWidget {
   const PostWidget({Key? key}) : super(key: key);

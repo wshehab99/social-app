@@ -28,3 +28,17 @@ class UserCreateErrorState extends AppStates {
   final String error;
   UserCreateErrorState({required this.error});
 }
+
+class UserGetDetailsSuccessState extends AppStates {}
+
+class UserGetDetailsErrorState extends AppStates {
+  final String error;
+  UserGetDetailsErrorState({required this.error});
+}
+
+class GetImageSuccessState extends AppStates {}
+
+class GetImageErrorState extends AppStates {
+  final String error;
+  GetImageErrorState({required this.error});
+}

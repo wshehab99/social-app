@@ -5,9 +5,10 @@ import 'package:social_media_app/cubit/app_states.dart';
 import 'package:social_media_app/layout/screens/chats_screen.dart';
 import 'package:social_media_app/layout/screens/feeds_screen.dart';
 import 'package:social_media_app/layout/screens/notifications_screen.dart';
-import 'package:social_media_app/layout/screens/search-screen.dart';
+import 'package:social_media_app/layout/screens/settings_screen.dart';
 import 'package:social_media_app/layout/widgets/posts/app_icon_button.dart';
 import 'package:social_media_app/layout/widgets/nav_bar_widget.dart';
+import 'package:social_media_app/models/user_model.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class HomeScreen extends StatelessWidget {
     const FeedsScreen(),
     const ChatsScreen(),
     const NotificationsScreen(),
-    const SearchScreen(),
+    const SettingsScreen(),
   ];
   @override
   Widget build(BuildContext context) {
