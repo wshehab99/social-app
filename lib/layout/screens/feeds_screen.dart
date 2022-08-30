@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/layout/widgets/post_widget.dart';
+import 'package:social_media_app/layout/widgets/posts/post_widget.dart';
 
 class FeedsScreen extends StatelessWidget {
   const FeedsScreen({Key? key}) : super(key: key);

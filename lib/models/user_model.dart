@@ -36,7 +36,7 @@ class UserModel {
       "coverImage":
           user.coverImage ?? "https://eataway.com/images/default-image.gif",
       "userId": user.userId,
-      "userBio": user.userBio ?? "",
+      "userBio": user.userBio ?? "I'm $name",
       "isEmailVerified": user.isEmailVerified ?? false,
     };
   }

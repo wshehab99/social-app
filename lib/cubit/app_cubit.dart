@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:social_media_app/cubit/app_states.dart';
 import 'package:social_media_app/models/user_model.dart';
 import 'package:social_media_app/shared/local/cache_helper.dart';
@@ -81,15 +84,20 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   UserModel? userModel;
+
   Future getUserDetails(String userId) async {
+    emit(LoadingState());
     await FirebaseFirestore.instance
         .collection("users")
         .doc(userId)
         .get()
         .then((value) {
       userModel = UserModel.fromJson(json: value.data()!);
+      emit(UserGetDetailsSuccessState());
       print(value.data());
-    }).catchError((error) {});
+    }).catchError((error) {
+      emit(UserGetDetailsErrorState(error: error));
+    });
   }
 
   Future<void> verfiyEmail() async {
@@ -104,5 +112,30 @@ class AppCubit extends Cubit<AppStates> {
   void cahngeCurrentIndex(int index) {
     currentIndex = index;
     emit(ChangeNavigationBarScreen());
+  }
+
+  final ImagePicker picker = ImagePicker();
+  File? profileImage;
+  File? coverImage;
+  Future<void> changeProfileImage() async {
+    await picker.pickImage(source: ImageSource.gallery).then((value) {
+      if (value != null) {
+        profileImage = File(value.path);
+        emit(GetImageSuccessState());
+      }
+    }).catchError((error) {
+      emit(GetImageErrorState(error: error));
+    });
+  }
+
+  Future<void> changeCoverImage() async {
+    await picker.pickImage(source: ImageSource.gallery).then((value) {
+      if (value != null) {
+        coverImage = File(value.path);
+        emit(GetImageSuccessState());
+      }
+    }).catchError((error) {
+      emit(GetImageErrorState(error: error));
+    });
   }
 }

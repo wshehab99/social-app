@@ -7,11 +7,13 @@ class SocialAppTextButton extends StatelessWidget {
     required this.onPressed,
     this.fontSize = 18,
     this.fontWeight = FontWeight.bold,
+    this.fontColor = Colors.blue,
   }) : super(key: key);
   final String? text;
   final void Function()? onPressed;
   final FontWeight? fontWeight;
   final double? fontSize;
+  final Color? fontColor;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +24,7 @@ class SocialAppTextButton extends StatelessWidget {
         style: TextStyle(
           fontSize: fontSize,
           fontWeight: fontWeight,
+          color: fontColor,
         ),
       ),
     );
