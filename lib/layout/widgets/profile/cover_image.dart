@@ -87,7 +87,7 @@ class CoverAndProfileImage extends StatelessWidget {
                           Theme.of(context).scaffoldBackgroundColor,
                       child: AppIconButton(
                         onPressed: () {
-                          cubit.changeCoverImage();
+                          cubit.pickImage(type: "cover");
                         },
                         icon: Icons.edit,
                       ),
@@ -103,8 +103,7 @@ class CoverAndProfileImage extends StatelessWidget {
                           Theme.of(context).scaffoldBackgroundColor,
                       child: AppIconButton(
                         onPressed: () {
-                          print("x");
-                          cubit.changeProfileImage();
+                          cubit.pickImage(type: "profile");
                         },
                         icon: Icons.camera_alt_outlined,
                       ),

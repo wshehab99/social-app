@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:social_media_app/cubit/app_cubit.dart';
 import 'package:social_media_app/cubit/app_states.dart';
 import 'package:social_media_app/layout/widgets/shop_text_button.dart';
@@ -29,7 +28,12 @@ class EditProfileScreen extends StatelessWidget {
                 "Edit Profile",
               ),
               actions: [
-                SocialAppTextButton(text: "Update", onPressed: () {}),
+                SocialAppTextButton(
+                    text: "Update",
+                    onPressed: () {
+                      cubit.uploadImage(
+                          uId: cubit.userModel!.userId!, type: "profile");
+                    }),
               ],
             ),
             body: (state is LoadingState)
