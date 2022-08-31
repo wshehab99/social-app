@@ -42,3 +42,10 @@ class GetImageErrorState extends AppStates {
   final String error;
   GetImageErrorState({required this.error});
 }
+
+class UploadImageSuccessState extends AppStates {}
+
+class UploadImageErrorState extends AppStates {
+  final String error;
+  UploadImageErrorState({required this.error});
+}

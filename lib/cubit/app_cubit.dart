@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import "package:firebase_storage/firebase_storage.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -117,10 +117,15 @@ class AppCubit extends Cubit<AppStates> {
   final ImagePicker picker = ImagePicker();
   File? profileImage;
   File? coverImage;
-  Future<void> changeProfileImage() async {
+  Future<void> pickImage({required String type}) async {
     await picker.pickImage(source: ImageSource.gallery).then((value) {
       if (value != null) {
-        profileImage = File(value.path);
+        if (type == "cover") {
+          coverImage = File(value.path);
+        } else {
+          profileImage = File(value.path);
+        }
+
         emit(GetImageSuccessState());
       }
     }).catchError((error) {
@@ -128,14 +133,22 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  Future<void> changeCoverImage() async {
-    await picker.pickImage(source: ImageSource.gallery).then((value) {
-      if (value != null) {
-        coverImage = File(value.path);
-        emit(GetImageSuccessState());
-      }
+  Future<void> uploadImage({required String uId, required String type}) async {
+    File file = File(profileImage!.path);
+    if (type == "cover") {
+      file = File(coverImage!.path);
+    }
+    FirebaseStorage.instance
+        .ref()
+        .child("users/$type/$uId/${Uri.file(file.path).pathSegments.last}")
+        .putFile(file)
+        .then((value) {
+      value.ref.getDownloadURL().then((value) {
+        print(value);
+      });
+      emit(UploadImageSuccessState());
     }).catchError((error) {
-      emit(GetImageErrorState(error: error));
+      emit(UploadImageErrorState(error: error));
     });
   }
 }
