@@ -8,7 +8,6 @@ import 'package:social_media_app/layout/screens/notifications_screen.dart';
 import 'package:social_media_app/layout/screens/settings_screen.dart';
 import 'package:social_media_app/layout/widgets/posts/app_icon_button.dart';
 import 'package:social_media_app/layout/widgets/nav_bar_widget.dart';
-import 'package:social_media_app/models/user_model.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
