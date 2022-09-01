@@ -96,7 +96,7 @@ class AppCubit extends Cubit<AppStates> {
       emit(UserGetDetailsSuccessState());
       print(value.data());
     }).catchError((error) {
-      emit(UserGetDetailsErrorState(error: error));
+      emit(UserGetDetailsErrorState(error: error.toString()));
     });
   }
 
@@ -133,22 +133,70 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  Future<void> uploadImage({required String uId, required String type}) async {
-    File file = File(profileImage!.path);
+  Future<String> uploadImage({
+    required String uId,
+    required String type,
+  }) async {
+    File? file;
+    if (type == "profile") {
+      file = File(profileImage!.path);
+    }
     if (type == "cover") {
       file = File(coverImage!.path);
     }
-    FirebaseStorage.instance
+    TaskSnapshot value = await FirebaseStorage.instance
         .ref()
-        .child("users/$type/$uId/${Uri.file(file.path).pathSegments.last}")
+        .child("users/$type/$uId/${Uri.file(file!.path).pathSegments.last}")
         .putFile(file)
-        .then((value) {
-      value.ref.getDownloadURL().then((value) {
-        print(value);
+        .catchError((error) {
+      print(error.toString());
+      emit(UploadImageErrorState(error: error.toString()));
+    });
+    emit(UploadImageSuccessState());
+    return await value.ref.getDownloadURL();
+  }
+
+  Future<void> updateData(
+      {required Map<String, dynamic> data, required String userId}) async {
+    emit(LoadingState());
+    if (profileImage != null) {
+      await uploadImage(
+        uId: userModel!.userId!,
+        type: "profile",
+      ).then((value) {
+        data.addAll({
+          'imageUrl': value,
+        });
       });
-      emit(UploadImageSuccessState());
+    } else {
+      data.addAll({
+        'imageUrl': userModel!.imageUrl,
+      });
+    }
+    if (coverImage != null) {
+      await uploadImage(
+        uId: userModel!.userId!,
+        type: "cover",
+      ).then((value) {
+        data.addAll({
+          "coverImage": value,
+        });
+      });
+    } else {
+      data.addAll({
+        "coverImage": userModel!.coverImage,
+      });
+    }
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(userId)
+        .set(data)
+        .then((value) {
+      getUserDetails(userId);
+      emit(UpdateDataSuccessState());
     }).catchError((error) {
-      emit(UploadImageErrorState(error: error));
+      print(error.toString());
+      emit(UpdateDataErrorState(error: error.toString()));
     });
   }
 }

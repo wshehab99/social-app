@@ -6,6 +6,7 @@ import 'package:social_media_app/layout/screens/home_screen.dart';
 import 'package:social_media_app/layout/widgets/app_alert_dialog.dart';
 import 'package:social_media_app/layout/widgets/social_app_button.dart';
 import 'package:social_media_app/layout/widgets/social_app_text_field.dart';
+import 'package:social_media_app/shared/local/cache_helper.dart';
 
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({Key? key}) : super(key: key);
@@ -30,7 +31,7 @@ class RegisterScreen extends StatelessWidget {
           child: BlocProvider(
             create: ((context) => AppCubit()),
             child: BlocConsumer<AppCubit, AppStates>(
-              listener: ((context, state) {
+              listener: ((context, state) async {
                 if (state is UserRegisterErrorState) {
                   showDialog(
                       context: context,
@@ -40,8 +41,15 @@ class RegisterScreen extends StatelessWidget {
                       context: context,
                       builder: (context) => AppAlertDialog(text: state.error));
                 } else if (state is UserCreateSuccessState) {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()));
+                  await CacheHelper.getData(key: "userId").then((value) {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BlocProvider(
+                                create: (context) =>
+                                    AppCubit()..getUserDetails(value),
+                                child: HomeScreen())));
+                  });
                 }
               }),
               builder: ((context, state) {
