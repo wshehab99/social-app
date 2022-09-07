@@ -13,8 +13,10 @@ import 'layout/screens/login_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   await CacheHelper.init();
   Bloc.observer = MyBlocObserver();
+  await CacheHelper.deleteData(key: 'userId');
   String userId = await CacheHelper.getData(key: 'userId') ?? "";
   runApp(SocialApp(userId: userId));
 }
