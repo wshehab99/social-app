@@ -49,7 +49,9 @@ class EditProfileScreen extends StatelessWidget {
                               "userId": cubit.userModel!.userId,
                             };
                             cubit.updateData(
-                                data: data, userId: cubit.userModel!.userId!);
+                              data: data,
+                              userId: cubit.userModel!.userId!,
+                            );
                           }),
               ],
             ),
@@ -83,9 +85,10 @@ class EditProfileScreen extends StatelessWidget {
                               height: 20,
                             ),
                             SocialAppTextField(
-                                controller: bioController,
-                                prefix: const Icon(Icons.info_outline),
-                                label: "Bio"),
+                              controller: bioController,
+                              prefix: const Icon(Icons.info_outline),
+                              label: "Bio",
+                            ),
                           ],
                         ),
                       ),

@@ -51,7 +51,11 @@ class AppCubit extends Cubit<AppStates> {
     print(user.user!.uid);
     print(user.user!.email);
     await createUser(
-        email: email, name: name, phone: phone, userId: user.user!.uid);
+      email: email,
+      name: name,
+      phone: phone,
+      userId: user.user!.uid,
+    );
     await CacheHelper.saveData(key: 'userId', value: user.user!.uid);
     emit(UserRegisterSuccessState());
   }
@@ -129,7 +133,7 @@ class AppCubit extends Cubit<AppStates> {
         emit(GetImageSuccessState());
       }
     }).catchError((error) {
-      emit(GetImageErrorState(error: error));
+      emit(GetImageErrorState(error: error.toString()));
     });
   }
 
