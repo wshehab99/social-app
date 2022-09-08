@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/cubit/app_cubit.dart';
 import 'package:social_media_app/cubit/app_states.dart';
+import 'package:social_media_app/layout/screens/home_screen.dart';
 import 'package:social_media_app/layout/widgets/shop_text_button.dart';
 import 'package:social_media_app/layout/widgets/social_app_text_field.dart';
 
@@ -21,7 +22,11 @@ class EditProfileScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => AppCubit()..getUserDetails(userId!),
       child: BlocConsumer<AppCubit, AppStates>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is UpdateDataSuccessState) {
+            Navigator.pop(context);
+          }
+        },
         builder: (context, state) {
           AppCubit cubit = context.read<AppCubit>();
           if (state is! LoadingState) {

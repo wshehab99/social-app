@@ -16,7 +16,7 @@ Future<void> main() async {
 
   await CacheHelper.init();
   Bloc.observer = MyBlocObserver();
-  await CacheHelper.deleteData(key: 'userId');
+
   String userId = await CacheHelper.getData(key: 'userId') ?? "";
   runApp(SocialApp(userId: userId));
 }
