@@ -11,11 +11,12 @@ class FeedsScreen extends StatelessWidget {
       child: Column(
         children: [
           ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) => const PostWidget(),
-              separatorBuilder: (context, index) => const SizedBox(height: 10),
-              itemCount: 15),
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) => const PostWidget(),
+            separatorBuilder: (context, index) => const SizedBox(height: 10),
+            itemCount: 15,
+          ),
         ],
       ),
     );

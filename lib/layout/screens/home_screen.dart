@@ -4,6 +4,7 @@ import 'package:social_media_app/cubit/app_cubit.dart';
 import 'package:social_media_app/cubit/app_states.dart';
 import 'package:social_media_app/layout/screens/chats_screen.dart';
 import 'package:social_media_app/layout/screens/feeds_screen.dart';
+import 'package:social_media_app/layout/screens/new_post.dart';
 import 'package:social_media_app/layout/screens/notifications_screen.dart';
 import 'package:social_media_app/layout/screens/settings_screen.dart';
 import 'package:social_media_app/layout/widgets/posts/app_icon_button.dart';
@@ -35,7 +36,18 @@ class HomeScreen extends StatelessWidget {
             iconTheme: Theme.of(context).iconTheme,
             actions: [
               AppIconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BlocProvider(
+                        create: ((context) => AppCubit()
+                          ..getUserDetails(cubit.userModel!.userId!)),
+                        child: NewPostScreen(),
+                      ),
+                    ),
+                  );
+                },
                 icon: Icons.add,
                 iconSize: 30,
               ),
