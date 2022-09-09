@@ -49,7 +49,9 @@ class SettingsScreen extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => EditProfileScreen(
                                 userId: cubit.userModel!.userId!,
-                              )));
+                              ))).then((value) {
+                    cubit.getUserDetails(cubit.userModel!.userId!);
+                  });
                 },
                 height: 35,
                 fontSize: 20,

@@ -26,7 +26,7 @@ class UserModel {
     userBio = json['userBio'];
     isEmailVerified = json['isEmailVerified'];
   }
-  Map<String, dynamic> toJson({required UserModel user}) {
+  static Map<String, dynamic> toJson({required UserModel user}) {
     return {
       "name": user.name,
       "email": user.email,
@@ -36,7 +36,7 @@ class UserModel {
       "coverImage":
           user.coverImage ?? "https://eataway.com/images/default-image.gif",
       "userId": user.userId,
-      "userBio": user.userBio ?? "I'm $name",
+      "userBio": user.userBio ?? "I'm ${user.name}",
       "isEmailVerified": user.isEmailVerified ?? false,
     };
   }

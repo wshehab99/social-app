@@ -2,11 +2,14 @@ import 'dart:io';
 import "package:firebase_storage/firebase_storage.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:social_media_app/cubit/app_states.dart';
 import 'package:social_media_app/models/user_model.dart';
 import 'package:social_media_app/shared/local/cache_helper.dart';
+
+import '../models/post_model.dart';
 
 class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(InitialAppstate());
@@ -78,7 +81,7 @@ class AppCubit extends Cubit<AppStates> {
         .collection('users')
         .doc(userId)
         .set(
-          user.toJson(user: user),
+          UserModel.toJson(user: user),
         )
         .then((value) {
       emit(UserCreateSuccessState());
@@ -121,13 +124,16 @@ class AppCubit extends Cubit<AppStates> {
   final ImagePicker picker = ImagePicker();
   File? profileImage;
   File? coverImage;
+  File? postImage;
   Future<void> pickImage({required String type}) async {
     await picker.pickImage(source: ImageSource.gallery).then((value) {
       if (value != null) {
         if (type == "cover") {
           coverImage = File(value.path);
-        } else {
+        } else if (type == "profile") {
           profileImage = File(value.path);
+        } else {
+          postImage = File(value.path);
         }
 
         emit(GetImageSuccessState());
@@ -147,6 +153,9 @@ class AppCubit extends Cubit<AppStates> {
     }
     if (type == "cover") {
       file = File(coverImage!.path);
+    }
+    if (type == "post") {
+      file = postImage;
     }
     TaskSnapshot value = await FirebaseStorage.instance
         .ref()
@@ -200,6 +209,33 @@ class AppCubit extends Cubit<AppStates> {
     }).catchError((error) {
       print(error.toString());
       emit(UpdateDataErrorState(error: error.toString()));
+    });
+  }
+
+  Future createPost({required text, required userId}) async {
+    emit(LoadingState());
+    String? imageUrl;
+    if (postImage != null) {
+      imageUrl = await uploadImage(uId: userId, type: "post");
+    }
+    PostModel post = PostModel(
+      author: userModel!,
+      date: DateTime.now().toString(),
+      text: text ?? "",
+      imageUrl: imageUrl ?? "",
+    );
+
+    await FirebaseFirestore.instance
+        .collection('posts')
+        .doc(userId)
+        .set(
+          PostModel.toJson(post: post),
+        )
+        .then((value) {
+          
+      emit(UserCreateSuccessState());
+    }).catchError((error) {
+      emit(UserCreateErrorState(error: error.toString()));
     });
   }
 }
