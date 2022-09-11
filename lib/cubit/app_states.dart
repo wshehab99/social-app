@@ -56,3 +56,35 @@ class UpdateDataErrorState extends AppStates {
   final String error;
   UpdateDataErrorState({required this.error});
 }
+
+class DeleteImageState extends AppStates {}
+
+class GetPostSuccessState extends AppStates {}
+
+class GetPostErrorstate extends AppStates {
+  final String error;
+  GetPostErrorstate({required this.error});
+}
+
+class LikePostSuccessState extends AppStates {}
+
+class LikePostErrorstate extends AppStates {
+  final String error;
+  LikePostErrorstate({required this.error});
+}
+
+class CommentPostSuccessState extends AppStates {}
+
+class CommentPostErrorstate extends AppStates {
+  final String error;
+  CommentPostErrorstate({required this.error});
+}
+
+class RefreshPostLoadingState extends AppStates {}
+
+class RefreshPostSuccessState extends AppStates {}
+
+class RefreshPostErrorstate extends AppStates {
+  final String error;
+  RefreshPostErrorstate({required this.error});
+}

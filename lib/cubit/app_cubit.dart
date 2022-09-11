@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import "package:firebase_storage/firebase_storage.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -224,18 +225,101 @@ class AppCubit extends Cubit<AppStates> {
       text: text ?? "",
       imageUrl: imageUrl ?? "",
     );
-
+    Map<String, dynamic> data = PostModel.toJson(post: post);
     await FirebaseFirestore.instance
         .collection('posts')
-        .doc(userId)
-        .set(
-          PostModel.toJson(post: post),
-        )
+        .add(data)
         .then((value) {
-          
-      emit(UserCreateSuccessState());
+      data.addAll({"postId": value.id});
+      FirebaseFirestore.instance
+          .collection("posts")
+          .doc(value.id)
+          .set(data)
+          .then((value) {
+        emit(UserCreateSuccessState());
+      }).catchError((error) {
+        print(error.toString());
+        emit(UserCreateErrorState(error: error.toString()));
+      });
     }).catchError((error) {
       emit(UserCreateErrorState(error: error.toString()));
+    });
+  }
+
+  List<PostModel> posts = [];
+  void deleteImage() {
+    postImage = null;
+    emit(DeleteImageState());
+  }
+
+  Future getPosts() async {
+    posts = [];
+    FirebaseFirestore.instance.collection("posts").get().then((value) {
+      for (QueryDocumentSnapshot<Map<String, dynamic>> element in value.docs) {
+        FirebaseFirestore.instance
+            .collection("posts")
+            .doc(element.id)
+            .collection("likes")
+            .get()
+            .then((likeValue) {
+          Map<String, dynamic> json = element.data();
+          json.addAll({
+            "likesNo": likeValue.docs.length,
+          });
+          posts.add(PostModel.fromJson(json: json));
+          emit(GetPostSuccessState());
+        });
+      }
+    }).catchError((error) {
+      emit(GetPostErrorstate(error: error));
+    });
+  }
+
+  Future likePost({required String postId}) async {
+    FirebaseFirestore.instance
+        .collection("posts")
+        .doc(postId)
+        .collection("likes")
+        .doc(userModel!.userId!)
+        .set({
+      "like": true,
+    }).then((value) {
+      emit(LikePostSuccessState());
+    }).catchError((error) {
+      emit(LikePostErrorstate(error: error));
+    });
+  }
+
+  Future commentPost({required String postId, required String comment}) async {
+    FirebaseFirestore.instance
+        .collection("posts")
+        .doc(postId)
+        .collection("comments")
+        .add({
+      "comment": comment,
+      'commentAuthor': userModel!.userId!,
+    }).then((value) {
+      emit(CommentPostSuccessState());
+    }).catchError((error) {
+      emit(CommentPostErrorstate(error: error));
+    });
+  }
+
+  Future refreshPost({required String postId}) async {
+    emit(RefreshPostLoadingState());
+    await FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postId)
+        .get()
+        .then((value) {
+      int postIndex = posts.indexWhere((element) {
+        return postId == element.postId!;
+      });
+
+      posts[postIndex] = PostModel.fromJson(json: value.data()!);
+      emit(RefreshPostSuccessState());
+    }).catchError((error) {
+      emit(RefreshPostErrorstate(error: error));
     });
   }
 }

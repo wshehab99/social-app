@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/cubit/app_cubit.dart';
 import 'package:social_media_app/cubit/app_states.dart';
+import 'package:social_media_app/layout/widgets/posts/app_icon_button.dart';
 import 'package:social_media_app/layout/widgets/shop_text_button.dart';
-import 'package:social_media_app/models/post_model.dart';
 
 class NewPostScreen extends StatelessWidget {
   NewPostScreen({super.key});
@@ -12,7 +12,11 @@ class NewPostScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
-      listener: ((context, state) {}),
+      listener: ((context, state) {
+        if (state is UserCreateSuccessState) {
+          Navigator.pop(context);
+        }
+      }),
       builder: ((context, state) {
         AppCubit cubit = context.read<AppCubit>();
         if (state is LoadingState) {
@@ -31,14 +35,13 @@ class NewPostScreen extends StatelessWidget {
               SocialAppTextButton(
                   text: "POST",
                   onPressed: () {
-                    cubit
-                        .createPost(
-                      text: postController.text,
-                      userId: cubit.userModel!.userId!,
-                    )
-                        .then((value) {
-                      Navigator.pop(context);
-                    });
+                    if (postController.text.isNotEmpty ||
+                        cubit.postImage != null) {
+                      cubit.createPost(
+                        text: postController.text,
+                        userId: cubit.userModel!.userId!,
+                      );
+                    }
                   })
             ],
           ),
@@ -104,7 +107,18 @@ class NewPostScreen extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyText2!.copyWith(),
                   ),
                   if (cubit.postImage != null)
-                    Image(image: FileImage(cubit.postImage!)),
+                    Stack(
+                      alignment: Alignment.topRight,
+                      children: [
+                        Image(image: FileImage(cubit.postImage!)),
+                        AppIconButton(
+                          onPressed: () {
+                            cubit.deleteImage();
+                          },
+                          icon: Icons.delete,
+                        ),
+                      ],
+                    ),
                   Row(
                     children: [
                       Expanded(
@@ -114,12 +128,16 @@ class NewPostScreen extends StatelessWidget {
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(Icons.image),
-                              SizedBox(
+                            children: [
+                              const Icon(Icons.image),
+                              const SizedBox(
                                 width: 5,
                               ),
-                              Text("Add Photo")
+                              Text(
+                                cubit.postImage == null
+                                    ? "Add Photo"
+                                    : "Edeit Photo",
+                              )
                             ],
                           ),
                         ),
