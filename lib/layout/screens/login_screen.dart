@@ -41,8 +41,9 @@ class LoginScreen extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => BlocProvider(
-                              create: (context) =>
-                                  AppCubit()..getUserDetails(value),
+                              create: (context) => AppCubit()
+                                ..getUserDetails(value)
+                                ..getPosts(),
                               child: HomeScreen())));
                 });
               }

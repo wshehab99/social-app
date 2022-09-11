@@ -6,6 +6,7 @@ import 'package:social_media_app/layout/screens/chats_screen.dart';
 import 'package:social_media_app/layout/screens/feeds_screen.dart';
 import 'package:social_media_app/layout/screens/new_post.dart';
 import 'package:social_media_app/layout/screens/notifications_screen.dart';
+import 'package:social_media_app/layout/screens/search-screen.dart';
 import 'package:social_media_app/layout/screens/settings_screen.dart';
 import 'package:social_media_app/layout/widgets/posts/app_icon_button.dart';
 import 'package:social_media_app/layout/widgets/nav_bar_widget.dart';
@@ -46,7 +47,9 @@ class HomeScreen extends StatelessWidget {
                         child: NewPostScreen(),
                       ),
                     ),
-                  );
+                  ).then((value) {
+                    cubit.getPosts();
+                  });
                 },
                 icon: Icons.add,
                 iconSize: 30,
@@ -57,7 +60,10 @@ class HomeScreen extends StatelessWidget {
                 iconSize: 30,
               ),
               AppIconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SearchScreen()));
+                },
                 icon: Icons.search,
                 iconSize: 30,
               ),

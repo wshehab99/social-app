@@ -37,7 +37,9 @@ class SocialApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: userId!.isNotEmpty
           ? BlocProvider(
-              create: ((context) => AppCubit()..getUserDetails(userId!)),
+              create: ((context) => AppCubit()
+                ..getUserDetails(userId!)
+                ..getPosts()),
               child: HomeScreen())
           : LoginScreen(),
     );
