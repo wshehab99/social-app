@@ -88,3 +88,17 @@ class RefreshPostErrorstate extends AppStates {
   final String error;
   RefreshPostErrorstate({required this.error});
 }
+
+class GetAllUsersSuccessState extends AppStates {}
+
+class GetAllUsersErrorstate extends AppStates {
+  final String error;
+  GetAllUsersErrorstate({required this.error});
+}
+
+class SendMessageSuccessState extends AppStates {}
+
+class SendMessageErrorstate extends AppStates {
+  final String error;
+  SendMessageErrorstate({required this.error});
+}

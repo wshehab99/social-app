@@ -43,7 +43,8 @@ class LoginScreen extends StatelessWidget {
                           builder: (context) => BlocProvider(
                               create: (context) => AppCubit()
                                 ..getUserDetails(value)
-                                ..getPosts(),
+                                ..getPosts()
+                                ..getAllUsers(userId: value),
                               child: HomeScreen())));
                 });
               }
