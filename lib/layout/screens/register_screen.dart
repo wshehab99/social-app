@@ -46,8 +46,10 @@ class RegisterScreen extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => BlocProvider(
-                                create: (context) =>
-                                    AppCubit()..getUserDetails(value),
+                                create: (context) => AppCubit()
+                                  ..getUserDetails(value)
+                                  ..getPosts()
+                                  ..getAllUsers(userId: value),
                                 child: HomeScreen())));
                   });
                 }

@@ -63,7 +63,7 @@ class PostWidget extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          post!.date!.substring(0, 15),
+                          post!.date!,
                           style: Theme.of(context).textTheme.caption,
                         )
                       ],
@@ -128,7 +128,7 @@ class PostWidget extends StatelessWidget {
                         width: 5,
                       ),
                       Text(
-                        "0 comments",
+                        post!.commentNo!.toString(),
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ],

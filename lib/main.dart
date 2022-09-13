@@ -16,7 +16,6 @@ Future<void> main() async {
 
   await CacheHelper.init();
   Bloc.observer = MyBlocObserver();
-
   String userId = await CacheHelper.getData(key: 'userId') ?? "";
   runApp(SocialApp(userId: userId));
 }
@@ -39,7 +38,8 @@ class SocialApp extends StatelessWidget {
           ? BlocProvider(
               create: ((context) => AppCubit()
                 ..getUserDetails(userId!)
-                ..getPosts()),
+                ..getPosts()
+                ..getAllUsers(userId: userId!)),
               child: HomeScreen())
           : LoginScreen(),
     );

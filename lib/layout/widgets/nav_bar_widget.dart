@@ -22,9 +22,9 @@ class NavBarWidget extends StatelessWidget {
             label: "Home",
             activeIcon: Icon(Icons.home)),
         BottomNavigationBarItem(
-          icon: Icon(Icons.apps),
-          label: "Categories",
-          activeIcon: Icon(Icons.menu),
+          icon: Icon(Icons.chat_outlined),
+          label: "Chats",
+          activeIcon: Icon(Icons.chat),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.favorite_border),
