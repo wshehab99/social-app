@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/cubit/app_cubit.dart';
@@ -13,7 +12,6 @@ class ChatDetails extends StatelessWidget {
   final UserModel? user;
   final String? userId;
   final TextEditingController messageController = TextEditingController();
-  final ScrollController listController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -25,29 +23,25 @@ class ChatDetails extends StatelessWidget {
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {},
         builder: (context, state) {
-          listController.animateTo(
-            500,
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.bounceInOut,
-          );
           AppCubit cubit = context.read<AppCubit>();
           return Scaffold(
             appBar: AppBar(
-                leadingWidth: 30,
-                title: Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        user!.imageUrl!,
-                      ),
-                      radius: 25,
+              leadingWidth: 30,
+              title: Row(
+                children: [
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(
+                      user!.imageUrl!,
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(user!.name!)
-                  ],
-                )),
+                    radius: 25,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(user!.name!)
+                ],
+              ),
+            ),
             body: Padding(
               padding: const EdgeInsets.only(
                 bottom: 50,
@@ -56,7 +50,6 @@ class ChatDetails extends StatelessWidget {
                 right: 10,
               ),
               child: ListView.separated(
-                controller: listController,
                 physics: const BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
                   return MessageWidget(

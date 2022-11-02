@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/cubit/app_cubit.dart';
 import 'package:social_media_app/cubit/app_states.dart';
-import 'package:social_media_app/layout/screens/home_screen.dart';
 import 'package:social_media_app/layout/widgets/shop_text_button.dart';
 import 'package:social_media_app/layout/widgets/social_app_text_field.dart';
 
