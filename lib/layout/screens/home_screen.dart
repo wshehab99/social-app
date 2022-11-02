@@ -61,8 +61,10 @@ class HomeScreen extends StatelessWidget {
               ),
               AppIconButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SearchScreen()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SearchScreen()));
                 },
                 icon: Icons.search,
                 iconSize: 30,
